@@ -4,10 +4,13 @@ beforeEach(async () => {
   page = await browser.newPage();
   await page.goto("https://github.com/team");
 });
+afterEach(() => {
+  page.close(6000);
+});
 
 describe("Github page tests", () => {
   test("The h1 header content", async () => {
-    await page.setDefaultNavigationTimeout(60000);
+    await page.setDefaultNavigationTimeout(6000);
     const firstLink1 = await page.$("header div div a");
     await firstLink1.click();
     await page.waitForSelector("h1");
@@ -24,7 +27,7 @@ describe("Github page tests", () => {
   });
 
   test("The page contains Sign in button", async () => {
-    await page.setDefaultNavigationTimeout(60000);
+    await page.setDefaultNavigationTimeout(6000);
     const btnSelector = ".btn-large-mktg.btn-mktg";
     await page.waitForSelector(btnSelector, {
       visible: true,
@@ -33,16 +36,11 @@ describe("Github page tests", () => {
     expect(actual).toContain("Get started with Team");
   });
 });
-afterEach(() => {
-  page.close(600000);
-});
-
-beforeEach(async () => {
-  page = await browser.newPage();
-  await page.goto("https://github.com/pricing");
-});
-
 describe("Github page tests 2", () => {
+  beforeEach(async () => {
+    page = await browser.newPage();
+    await page.goto("https://github.com/pricing");
+  });
   test("The h1 header content 2", async () => {
     await page.setDefaultNavigationTimeout(600);
     const firstLink1 = await page.$(
@@ -68,8 +66,5 @@ describe("Github page tests 2", () => {
     });
     const actual = await page.$eval(btnSelector, (link) => link.textContent);
     expect(actual).toContain("Join for free");
-  });
-  afterEach(() => {
-    page.close();
   });
 });
